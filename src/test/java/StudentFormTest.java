@@ -45,6 +45,7 @@ public void studentFormPositive(){
             .build();
 fillForm(studentDTO);
 pause(5000);
+    RemoveAdd();
 submit();
 
 }
