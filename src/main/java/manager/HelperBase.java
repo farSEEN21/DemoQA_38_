@@ -73,4 +73,18 @@ public interface HelperBase extends AppManager {
         js.executeScript("document.querySelector('#adplus-anchor').style.display='none';");
 
     }
+    default void hideFooter() {
+        JavascriptExecutor js = (JavascriptExecutor) wd;
+        js.executeScript("document.querySelector('footer').style.display='none';");
+
+    }
+  default void hideDiv() {
+      JavascriptExecutor js = (JavascriptExecutor) wd;
+      js.executeScript("document.querySelector('#fixedban').style.zIndex=-1");
+
+    }
+
+    default boolean isElementPresent(By locator){
+        return wd.findElements(locator).size() > 0;
+    }
 }

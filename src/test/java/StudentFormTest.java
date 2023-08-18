@@ -36,15 +36,17 @@ public void studentFormPositive(){
             .email("sara@dasdk.ru")
             .gender(Gender.OTHER)
             .phone("12332112332")
-            .birthday("05 05 2000")
+            .birthday("6 29 2000")
             .subjects("Maths,Physics")
             .hobbies(hobby)
             .address("Main Street 2")
             .State("NCR")
             .city("Delhi")
             .build();
+    hideFooter();
+    hideDiv();
 fillForm(studentDTO);
-pause(5000);
+
     RemoveAdd();
 submit();
 

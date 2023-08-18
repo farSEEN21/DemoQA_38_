@@ -5,6 +5,8 @@ import models.Hobby;
 import models.StudentDTO;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 public interface HelperStudent extends HelperBase {
 
     default void selectForms() {
+        if (isElementPresent(By.id("adplus-anchor"))){RemoveAdd();}
         click(By.xpath("//div[@class='category-cards']/div[2]"));
     }
 
@@ -27,10 +30,11 @@ public interface HelperStudent extends HelperBase {
         type(By.id("firstName"), studen.getFirstName());
         type(By.id("lastName"), studen.getLastName());
         type(By.id("userEmail"), studen.getEmail());
-
+//        typeBday(studen.getBirthday());
+        typeBDSelect(studen.getBirthday());
         type(By.id("userNumber"), studen.getPhone());
         //   typeBDay(studen.getBirthday());
-        chooseDate(studen.getBirthday());
+      //  chooseDate(studen.getBirthday()); //work
 //        FromNumToString(studen.getBirthday());
         type(By.id("currentAddress"), studen.getAddress());
         typeState(studen.getState());
@@ -38,7 +42,21 @@ public interface HelperStudent extends HelperBase {
         addSubject(studen.getSubjects());
         selectGender(studen.getGender());
         selectHobby(studen.getHobbies());
+        uploadPicture();
     }
+default void typeBday(String bith){
+      WebElement date =  wd.findElement(By.id("dateOfBirthInput"));
+        date.click();
+        //date.sendKeys( );
+        String os= System.getProperty("os.name");
+    System.out.println(os);
+    if(os.startsWith("Win"))
+    {date.sendKeys(Keys.chord(Keys.CONTROL,"a"));}
+    else
+    {date.sendKeys(Keys.chord(Keys.COMMAND,"a"));}
+    date.sendKeys(bith);
+    date.sendKeys(Keys.ENTER);
+}
 
     default void chooseDate(String birthday) {
         click(By.id("dateOfBirthInput"));
@@ -118,6 +136,22 @@ public interface HelperStudent extends HelperBase {
         }
         return birth;
     }
+default void typeBDSelect (String str){
+
+        String []date =str.split(" ");
+    click(By.id("dateOfBirthInput"));
+    new Select(wd.findElement(By.className("react-datepicker__month-select"))).selectByValue(""+(Integer.parseInt(date[0])-1));
+    new Select(wd.findElement(By.className("react-datepicker__year-select"))).selectByValue(date[2]);
+    String day=String.format("//div[.='%s']",date[1]);
+    List<WebElement>days=wd.findElements(By.xpath(day));
+    if (days.size()>1&&Integer.parseInt(date[1])>15){
+        days.get(1).click();
+    } else {days.get(0).click();}
+    click(By.xpath("//div[.='"+date[1]+"']"));
+
+
+
+}
 
     default String FromNumToString(String birthday) {
 //        click(By.id("dateOfBirthInput"));
@@ -189,7 +223,7 @@ public interface HelperStudent extends HelperBase {
             switch (hobby) {
                 case SPORTS:
 
-                    click(By.xpath("//label[normalize-space()='Sports']"));
+                    click(By.xpath("//label[@for='hobbies-checkbox-1']"));
                     break;
 
                 case READING:
@@ -208,6 +242,17 @@ public interface HelperStudent extends HelperBase {
 
     }
 
+
+
+    default void uploadPicture(){
+        wd.findElement(By.id("uploadPicture")).sendKeys("C:\\Users\\bluvg\\Documents\\GitHub\\DemoQA_38_\\123123.jpg");
+    }
+
+
+
+
+
+
     default void typeState(String state) {
         wd.findElement(By.id("react-select-3-input")).sendKeys(state);
         wd.findElement(By.id("react-select-3-input")).sendKeys((Keys.ENTER));
@@ -221,6 +266,8 @@ public interface HelperStudent extends HelperBase {
     default void submit() {
         click(By.id("submit"));
     }
+
+
 
 }
 
